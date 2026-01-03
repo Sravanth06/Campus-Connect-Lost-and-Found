@@ -1,0 +1,45 @@
+{% extends 'items/base.html' %}
+
+{% block title %}All Items - CampusConnect{% endblock %}
+
+{% block content %}
+  <h1 class="mb-4 text-center">Lost & Found Items</h1>
+  <div class="row">
+    {% for item in items %}
+    <div class="col-md-6 col-lg-4 mb-4">
+      <div class="card h-100">
+        {% if item.image %}
+          <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="height: 200px; object-fit: cover;">
+        {% else %}
+          <div class="d-flex align-items-center justify-content-center" style="height: 200px; background-color: #e9ecef;">
+            <span class="text-muted">No Image</span>
+          </div>
+        {% endif %}
+        <div class="card-body d-flex flex-column">
+  <h5 class="card-title d-flex justify-content-between">
+    {{ item.name }}
+    <span class="badge {% if item.item_type == 'Lost' %}badge-lost{% else %}badge-found{% endif %}">
+      {{ item.item_type }}
+    </span>
+  </h5>
+  <p class="card-text text-muted">{{ item.description|truncatewords:20 }}</p>
+  
+  <a href="{% url 'item_detail' item.id %}" class="btn btn-outline-primary btn-sm mt-2 mb-3">View Details & AI Matches</a>
+  
+  <ul class="list-group list-group-flush mt-auto">
+    <li class="list-group-item"><strong>Location:</strong> {{ item.location }}</li>
+    <li class="list-group-item"><strong>Contact:</strong> {{ item.contact_info }}</li>
+  </ul>
+</div>
+        <div class="card-footer text-muted">
+          Reported by {{ item.user.username }} on {{ item.date_reported|date:"d M Y" }}
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="col">
+      <p class="text-center lead">No items have been reported yet. Be the first!</p>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock %}

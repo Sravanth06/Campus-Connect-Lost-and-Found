@@ -1,0 +1,60 @@
+{% extends 'items/base.html' %}
+
+{% block title %}{{ item.name }} - Details{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-7">
+        <div class="card shadow-sm mb-4">
+            {% if item.image %}
+            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="max-height: 400px; object-fit: cover;">
+            {% endif %}
+            <div class="card-body">
+                <span class="badge {% if item.item_type == 'Lost' %}bg-danger{% else %}bg-success{% endif %} mb-2">
+                    {{ item.item_type }}
+                </span>
+                <h2 class="card-title">{{ item.name }}</h2>
+                <p class="lead">{{ item.description }}</p>
+                <hr>
+                <ul class="list-unstyled">
+                    <li><strong>📍 Location:</strong> {{ item.location }}</li>
+                    <li><strong>📞 Contact:</strong> {{ item.contact_info }}</li>
+                    <li><strong>📅 Date:</strong> {{ item.date_reported }}</li>
+                </ul>
+            </div>
+            <div class="card-footer">
+                <a href="{% url 'item_list' %}" class="btn btn-secondary">Back to List</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="card border-warning mb-3">
+            <div class="card-header bg-warning text-dark">
+                <h4 class="mb-0">🤖 AI Suggested Matches</h4>
+            </div>
+            <div class="card-body">
+                {% if matches %}
+                    <p class="card-text">We found <strong>{{ matches|length }}</strong> potential matches:</p>
+                    <div class="list-group">
+                        {% for match in matches %}
+                        <a href="{% url 'item_detail' match.item.id %}" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <div>
+                                <h6 class="mb-1">{{ match.item.name }}</h6>
+                                <small class="text-muted">{{ match.item.description|truncatewords:8 }}</small>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">{{ match.score }}%</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <div class="text-center py-4">
+                        <p class="text-muted">No matches found yet.</p>
+                        <small>We will keep checking automatically!</small>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

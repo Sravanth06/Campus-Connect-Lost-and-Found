@@ -1,0 +1,13 @@
+# Ignore the virtual environment
+venv/
+env/
+
+# Ignore Python compiled files
+__pycache__/
+*.pyc
+
+# Ignore the database (Optional: remove this line if you want to share your sample data)
+db.sqlite3
+
+# Ignore media uploads (Optional: keep if you want sample images online)
+media/
